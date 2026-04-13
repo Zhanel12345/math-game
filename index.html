@@ -12,7 +12,6 @@ body {
     text-align: center;
 }
 
-/* Верхняя панель */
 .header {
     background: #2f80ed;
     color: white;
@@ -21,13 +20,11 @@ body {
     font-weight: bold;
 }
 
-/* Контейнер */
 .container {
     max-width: 400px;
     margin: 20px auto;
 }
 
-/* Карточки */
 .card {
     background: white;
     padding: 15px;
@@ -39,11 +36,21 @@ body {
     line-height: 1.6;
 }
 
-/* Скрытая зона */
-#secretArea {
+/* Скрытые зоны */
+#secretTopRight {
     position: fixed;
     top: 0;
     right: 0;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+    z-index: 999;
+}
+
+#secretTopLeft {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 80px;
     height: 80px;
     opacity: 0;
@@ -75,37 +82,56 @@ body {
 
 </div>
 
-<!-- Скрытая область -->
-<div id="secretArea"></div>
+<!-- Скрытые зоны -->
+<div id="secretTopRight"></div>
+<div id="secretTopLeft"></div>
 
 <script>
+let fastBreathing = false;
+
 // Симуляция данных
 setInterval(() => {
+
     let bpm = Math.floor(65 + Math.random() * 20);
     let spo2 = Math.floor(95 + Math.random() * 4);
-    let resp = Math.floor(10 + Math.random() * 10);
+
+    let resp;
+    if (fastBreathing) {
+        resp = Math.floor(25 + Math.random() * 10); // высокие значения
+    } else {
+        resp = Math.floor(10 + Math.random() * 10);
+    }
 
     document.getElementById("bpm").innerText = bpm;
     document.getElementById("spo2").innerText = spo2;
     document.getElementById("resp").innerText = resp;
 
     document.getElementById("type").innerText =
-        resp < 12 ? "Баяу" : "Қалыпты";
+        fastBreathing ? "Жиі" : (resp < 12 ? "Баяу" : "Қалыпты");
 
     document.getElementById("mic").innerText =
         Math.floor(1 + Math.random() * 10);
 
 }, 2000);
 
-// Переключение кашля
+// Жөтел (правый угол)
 function toggleCough() {
     let el = document.getElementById("cough");
     el.innerText = (el.innerText === "Жоқ") ? "Иә" : "Жоқ";
 }
 
-// Скрытый клик (правый верхний угол)
-document.getElementById("secretArea").addEventListener("click", () => {
+// Переключение дыхания (левый угол)
+function toggleBreathing() {
+    fastBreathing = !fastBreathing;
+}
+
+// Обработчики
+document.getElementById("secretTopRight").addEventListener("click", () => {
     toggleCough();
+});
+
+document.getElementById("secretTopLeft").addEventListener("click", () => {
+    toggleBreathing();
 });
 </script>
 

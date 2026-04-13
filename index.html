@@ -1,80 +1,113 @@
-<!DOCTYPE html><html lang="ru">
+<!DOCTYPE html>
+<html lang="kk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Симуляция датчиков — Алматы</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-    .card {
-      background: rgba(0,0,0,0.3);
-      border-radius: 20px;
-      padding: 20px;
-      margin: 15px auto;
-      max-width: 300px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .value {
-      font-size: 32px;
-      font-weight: bold;
-    }
-    .status-safe {
-      color: #00ff88;
-      font-weight: bold;
-    }
-    .status-danger {
-      color: red;
-      font-weight: bold;
-      animation: blink 1s infinite;
-    }
-    @keyframes blink {
-      50% { opacity: 0.3; }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Денсаулық мониторингі</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef3f7;
+    text-align: center;
+}
+
+/* Верхняя панель */
+.header {
+    background: #2f80ed;
+    color: white;
+    padding: 15px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Контейнер */
+.container {
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+/* Карточки */
+.card {
+    background: white;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Скрытая зона */
+#secretArea {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+    z-index: 999;
+}
+</style>
 </head>
-<body><h1>🌍 Мониторинг среды (Алматинская область)</h1><div class="card">
-  <h2>Температура</h2>
-  <div id="temp" class="value">-- °C</div>
-</div><div class="card">
-  <h2>Влажность</h2>
-  <div id="humidity" class="value">-- %</div>
-</div><div class="card">
-  <h2>Давление</h2>
-  <div id="pressure" class="value">-- hPa</div>
-</div><div class="card">
-  <h2>Огонь в помещении</h2>
-  <div id="fire" class="value status-safe">Нет</div>
-</div><script>
-function random(min, max) {
-  return (Math.random() * (max - min) + min).toFixed(1);
+
+<body>
+
+<div class="header">🩺 Денсаулық мониторингі</div>
+
+<div class="container">
+
+    <div class="card">
+        ❤️ Жүрек соғу жиілігі: <span id="bpm">72</span> bpm<br>
+        🩸 Оттегімен қанығуы (SpO₂): <span id="spo2">97</span> %
+    </div>
+
+    <div class="card">
+        🌬 Тыныс алу жиілігі: <span id="resp">16</span> /мин<br>
+        Түрі: <span id="type">Қалыпты</span>
+    </div>
+
+    <div class="card">
+        🤧 Жөтел: <span id="cough">Жоқ</span><br>
+        🎤 Микрофон деңгейі: <span id="mic">5</span>
+    </div>
+
+</div>
+
+<!-- Скрытая область -->
+<div id="secretArea"></div>
+
+<script>
+// Симуляция данных
+setInterval(() => {
+    let bpm = Math.floor(65 + Math.random() * 20);
+    let spo2 = Math.floor(95 + Math.random() * 4);
+    let resp = Math.floor(10 + Math.random() * 10);
+
+    document.getElementById("bpm").innerText = bpm;
+    document.getElementById("spo2").innerText = spo2;
+    document.getElementById("resp").innerText = resp;
+
+    document.getElementById("type").innerText =
+        resp < 12 ? "Баяу" : "Қалыпты";
+
+    document.getElementById("mic").innerText =
+        Math.floor(1 + Math.random() * 10);
+
+}, 2000);
+
+// Переключение кашля
+function toggleCough() {
+    let el = document.getElementById("cough");
+    el.innerText = (el.innerText === "Жоқ") ? "Иә" : "Жоқ";
 }
 
-function updateData() {
-  document.getElementById('temp').innerText = random(10, 35) + ' °C';
-  document.getElementById('humidity').innerText = random(20, 80) + ' %';
-  document.getElementById('pressure').innerText = random(720, 760) + ' hPa';
+// Скрытый клик (правый верхний угол)
+document.getElementById("secretArea").addEventListener("click", () => {
+    toggleCough();
+});
+</script>
 
-  const fireChance = Math.random();
-  const fireElement = document.getElementById('fire');
-
-  if (fireChance > 0.85) {
-    fireElement.innerText = '🔥 ОПАСНО!';
-    fireElement.className = 'value status-danger';
-  } else {
-    fireElement.innerText = 'Нет';
-    fireElement.className = 'value status-safe';
-  }
-}
-
-setInterval(updateData, 2000);
-updateData();
-</script></body>
-                   </html>
+</body>
+</html>
